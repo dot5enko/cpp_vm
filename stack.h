@@ -40,7 +40,7 @@ public:
      *
      * @return exit code
      */
-    int executeNextOp();
+     int execute();
 
     int pushOp(operation op);
 };

@@ -13,13 +13,18 @@ enum operation_id {
     JMP_IF,
     JMP,
     CMP,
-    ADD,
+    ADD_REFS_INT,
     DIV,
-    INC,
+    DIV_REF_CONST,
+    INC_REF,
     EQ,
     NOT_EQ,
-    NOT_EQ_ZERO,
-    MOV_TO_VAR
+    NOT_EQ_REFS_INT,
+    NOT_EQ_REF_CONST,
+    NOT_EQ_CONST,
+    MOV_TO_VAR,
+    MUL_REF_CONST,
+    ASSIGN_INT
 };
 
 #include <cstdint>
@@ -32,6 +37,7 @@ using namespace std;
 class operation {
 public:
     operation(operation_id op);
+    operation(){};
     ~operation();
 
     operation_id    op;
@@ -43,7 +49,7 @@ public:
     void argument_int(int arg);
     void argument_str(char* arg);
     void argument_ptr(void* ptr);
-    void argument_var_ref(char* name);
+    void argument_var_ref(int refId);
 };
 
 

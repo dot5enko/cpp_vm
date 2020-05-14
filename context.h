@@ -12,8 +12,7 @@
 using namespace std;
 
 struct context {
-    map<string,vm_var*> variables;
-    vm_var* variables_arr[255];
+    vm_var* variables[255];
 };
 
 

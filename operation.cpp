@@ -42,8 +42,8 @@ void operation::argument_ptr(void *ptr) {
     cur->type = 3;
 }
 
-void operation::argument_var_ref(char *name) {
+void operation::argument_var_ref(int refId) {
     auto cur = &this->args[this->args_count++];
-    cur->data.str = strdup(name);
+    cur->data.ival = refId;
     cur->type = 4;
 }

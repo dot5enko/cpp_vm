@@ -14,11 +14,35 @@ map
 vm_var.h
 /home/serhio/CLionProjects/cpp_vm/vm_var.h
 
+/home/serhio/CLionProjects/cpp_vm/main.cpp
+iostream
+-
+stack.h
+/home/serhio/CLionProjects/cpp_vm/stack.h
+vm_var.h
+/home/serhio/CLionProjects/cpp_vm/vm_var.h
+
 /home/serhio/CLionProjects/cpp_vm/op_argument.h
 cstdint
 -
 vm_var.h
 /home/serhio/CLionProjects/cpp_vm/vm_var.h
+
+/home/serhio/CLionProjects/cpp_vm/operation.cpp
+operation.h
+/home/serhio/CLionProjects/cpp_vm/operation.h
+iostream
+-
+cstdarg
+-
+memory.h
+-
+vm_var.h
+/home/serhio/CLionProjects/cpp_vm/vm_var.h
+context.h
+/home/serhio/CLionProjects/cpp_vm/context.h
+stack.h
+/home/serhio/CLionProjects/cpp_vm/stack.h
 
 /home/serhio/CLionProjects/cpp_vm/operation.h
 cstdint
