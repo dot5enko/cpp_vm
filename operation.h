@@ -24,7 +24,9 @@ enum operation_id {
     NOT_EQ_CONST,
     MOV_TO_VAR,
     MUL_REF_CONST,
-    ASSIGN_INT
+    ASSIGN_INT,
+    INIT_LOOP,
+    LOOP_STEP
 };
 
 #include <cstdint>
@@ -43,7 +45,7 @@ public:
     operation_id    op;
 
     int args_count;
-    op_argument args[4];
+    op_argument args[5];
 
     void argument(op_argument arg);
     void argument_int(int arg);

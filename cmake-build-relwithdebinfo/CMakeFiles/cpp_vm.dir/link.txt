@@ -1,0 +1,1 @@
+/usr/bin/c++  -O2 -g -DNDEBUG   CMakeFiles/cpp_vm.dir/main.cpp.o CMakeFiles/cpp_vm.dir/stack.cpp.o CMakeFiles/cpp_vm.dir/context.cpp.o CMakeFiles/cpp_vm.dir/operation.cpp.o CMakeFiles/cpp_vm.dir/vm_var.cpp.o CMakeFiles/cpp_vm.dir/op_argument.cpp.o  -o cpp_vm 

@@ -21,6 +21,31 @@ int stack::execute() {
         auto that = &this->operations[this->curOp++];
 
         switch (that->op) {
+            case INIT_LOOP:{
+
+                int loop_id = arg_int(0);
+
+                this->loop.countervar = arg_int(1);
+                this->loop.condTill = get_ctx_var(arg_int(2)).i;
+                this->loop.step = arg_int(3);
+                this->loop.op_addr = arg_int(4);
+
+            }
+                break;
+            case LOOP_STEP:{
+
+                int iValOld = get_ctx_var(this->loop.countervar).i;
+
+                get_ctx_var(this->loop.countervar).i += this->loop.step;
+                int iVal = get_ctx_var(this->loop.countervar).i;
+
+                if (iVal <= this->loop.condTill) {
+                    this->curOp = this->loop.op_addr;
+                } else {
+                    // free loop closure resources
+                }
+            }
+            break;
             case SET_FIELD: {
                 int id = arg_int(0);
                 auto x = arg_var(1);

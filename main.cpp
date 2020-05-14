@@ -6,6 +6,8 @@
 #define VAR_COUNT 1
 #define VAR_A 2
 
+#define LOOP_MAIN 1
+
 int main() {
 
     stack x;
@@ -29,18 +31,22 @@ int main() {
     }
     x.pushOp(set_count_var);
 
+    int curAddr = 0;
+
     {
         operation set_var(SET_FIELD);
         set_var.argument_int(VAR_A);
         set_var.argument_int(0);
-        x.pushOp(set_var);
+        curAddr = x.pushOp(set_var);
     }
 
-    operation inc_i(INC_REF);
-    inc_i.argument_int(VAR_I);
-    auto loopStart  = x.pushOp(inc_i);
-
-    cout << " loop start address " << loopStart << endl;
+    operation loop_init(INIT_LOOP);
+    loop_init.argument_int(LOOP_MAIN);
+    loop_init.argument_int(VAR_I); // counter
+    loop_init.argument_int(VAR_COUNT); // counter less than reference
+    loop_init.argument_int(1); // step
+    loop_init.argument_int(curAddr + 2); // first op inside loop address
+    x.pushOp(loop_init);
 
     operation mul_a(MUL_REF_CONST);
     mul_a.argument_int(VAR_I);
@@ -72,15 +78,8 @@ int main() {
         x.pushOp(print_i_op);
     }
 
-    operation cmp_i_and_count(NOT_EQ_REFS_INT);
-    cmp_i_and_count.argument_int(VAR_I);
-    cmp_i_and_count.argument_int(VAR_COUNT);
-
-    x.pushOp(cmp_i_and_count);
-
-    operation jmp_if_true(JMP_IF);
-    jmp_if_true.argument_int(loopStart);
-    x.pushOp(jmp_if_true);
+    operation loop_step(LOOP_STEP);
+    x.pushOp(loop_step);
 
     int iter = 0;
 

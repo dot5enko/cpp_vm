@@ -21,6 +21,15 @@ struct registers {
     op_argument var_v[reg_size];
 };
 
+struct loopstate {
+    int countervar;
+    int condTill;
+    int step;
+
+    // command addr
+    int op_addr;
+};
+
 class stack {
 public:
     context ctx;
@@ -29,11 +38,9 @@ public:
     registers r;
     int opsSize = 0;
 
-    op_argument zero_int;
+    loopstate loop;
 
     stack() {
-        zero_int.data.ival = 0;
-        zero_int.type = 1;
     }
 
     /**
@@ -43,6 +50,7 @@ public:
      int execute();
 
     int pushOp(operation op);
+
 };
 
 
