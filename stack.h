@@ -30,6 +30,8 @@ struct loopstate {
     int op_addr;
 };
 
+struct stack_frame;
+
 class stack {
 public:
     context ctx;
@@ -37,6 +39,8 @@ public:
     int curOp = 0;
     registers r;
     int opsSize = 0;
+
+    stack_frame** global_ctx;
 
     loopstate loop;
 
@@ -53,5 +57,15 @@ public:
 
 };
 
+struct stack_frame {
+
+    stack _stack;
+
+    stack_frame(stack_frame** global_ctx) {
+        _stack.global_ctx = global_ctx;
+    }
+};
+
+void execute_stack_frame(stack_frame* frame);
 
 #endif //CPP_VM_STACK_H

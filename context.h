@@ -12,7 +12,8 @@
 using namespace std;
 
 struct context {
-    vm_var* variables[255];
+    vm_var* variables;
+    int count;
 };
 
 

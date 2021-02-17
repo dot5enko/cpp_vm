@@ -26,7 +26,8 @@ enum operation_id {
     MUL_REF_CONST,
     ASSIGN_INT,
     INIT_LOOP,
-    LOOP_STEP
+    LOOP_STEP,
+    CALL_FN
 };
 
 #include <cstdint>

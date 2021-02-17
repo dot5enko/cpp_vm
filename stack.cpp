@@ -8,7 +8,7 @@
 #define arg_str(argIndex) that->args[argIndex].data.str
 #define arg_ptr(argIndex) that->args[argIndex].data.ptr
 #define arg_var(argIndex) that->args[argIndex]
-#define get_ctx_var(id) this->ctx.variables[id]->static_value
+#define get_ctx_var(id) this->ctx.variables[id].static_value
 
 int stack::execute() {
 
@@ -21,6 +21,41 @@ int stack::execute() {
         auto that = &this->operations[this->curOp++];
 
         switch (that->op) {
+            case CALL_FN: {
+
+                auto fn_addr = arg_int(0);
+                int retval_ref = arg_int(1);
+
+                auto frame_ptr = this->global_ctx[fn_addr];
+
+                int argsOffset = 2;
+
+                // assign current context values to
+                for (int argI = 0 ; argI < frame_ptr->_stack.ctx.count - 1 ; argI++ ) {
+                    int argOffset = argI + argsOffset;
+                    frame_ptr->_stack.ctx.variables[argI + 1].static_value.i = this->ctx.variables[arg_int(argOffset)].static_value.i;
+
+
+                    cout << " fn " << argOffset  << "th arg -> local "<<(argI + 1)<<" : " << this->ctx.variables[arg_int(argOffset)].static_value.i << endl;
+                }
+
+                execute_stack_frame(frame_ptr);
+
+                cout << " fn result: " << frame_ptr->_stack.ctx.variables[0].static_value.i << endl;
+
+                this->ctx.variables[retval_ref] = frame_ptr->_stack.ctx.variables[0].static_value.i;
+            } break;
+            case ADD_REFS_INT: {
+
+                int arg_two_addr = arg_int(1);
+                int arg_one_addr = arg_int(0);
+
+                int val0 = get_ctx_var(arg_one_addr).i;
+                int val1 = get_ctx_var(arg_two_addr).i;
+
+                this->r.int_v[0] = val0 + val1;
+
+            }break;
             case INIT_LOOP:{
 
                 int loop_id = arg_int(0);
@@ -50,7 +85,7 @@ int stack::execute() {
                 int id = arg_int(0);
                 auto x = arg_var(1);
 
-                vm_var *newVar = new vm_var();
+                vm_var *newVar = &this->ctx.variables[id];
 
                 switch (x.type) {
                     case 1:
@@ -62,7 +97,6 @@ int stack::execute() {
                 }
 
 //                cout << " going to set a variable in vm : " << id << " -> " << newVar->static_value.i << endl;
-                this->ctx.variables[id] = newVar;
             }
                 break;
 
@@ -81,13 +115,13 @@ int stack::execute() {
                 int val1;
 
                 if (var.type == 4) {
-                    val0 = this->ctx.variables[var.data.ival]->static_value.i;
+                    val0 = this->ctx.variables[var.data.ival].static_value.i;
                 } else {
                     val0 = var.data.ival;
                 }
 
                 if (var1.type == 4) {
-                    val1 = this->ctx.variables[var1.data.ival]->static_value.i;
+                    val1 = this->ctx.variables[var1.data.ival].static_value.i;
                 } else {
                     val1 = var1.data.ival;
                 }
@@ -120,13 +154,13 @@ int stack::execute() {
                 int val1;
 
                 if (var.type == 4) {
-                    val0 = this->ctx.variables[var.data.ival]->static_value.i;
+                    val0 = this->ctx.variables[var.data.ival].static_value.i;
                 } else {
                     val0 = var.data.ival;
                 }
 
                 if (var1.type == 4) {
-                    val1 = this->ctx.variables[var1.data.ival]->static_value.i;
+                    val1 = this->ctx.variables[var1.data.ival].static_value.i;
                 } else {
                     val1 = var1.data.ival;
                 }
@@ -162,7 +196,7 @@ int stack::execute() {
             }
                 break;
             case DIV_REF_CONST : {
-                int val0 = this->ctx.variables[arg_int(0)]->static_value.i;
+                int val0 = this->ctx.variables[arg_int(0)].static_value.i;
                 int val1 = arg_int(1);
 
                 // put result into first var register
@@ -184,13 +218,13 @@ int stack::execute() {
                     int val1;
 
                     if (var.type == 4) {
-                        val0 = this->ctx.variables[var.data.ival]->static_value.i;
+                        val0 = this->ctx.variables[var.data.ival].static_value.i;
                     } else {
                         val0 = var.data.ival;
                     }
 
                     if (var1.type == 4) {
-                        val1 = this->ctx.variables[var1.data.ival]->static_value.i;
+                        val1 = this->ctx.variables[var1.data.ival].static_value.i;
                     } else {
                         val1 = var1.data.ival;
                     }
@@ -215,7 +249,7 @@ int stack::execute() {
 
                     // its a reference or func call
                     cout << " this the print op of referenced context `" << var.data.ival << "`= "
-                         << var_val->static_value.i << endl;
+                         << var_val.static_value.i << endl;
                 }
 
             }
@@ -232,4 +266,17 @@ int stack::pushOp(operation op) {
     this->operations.push_back(op);
     this->opsSize = this->operations.size();
     return this->opsSize - 1;
+}
+
+void execute_stack_frame(stack_frame* frame) {
+
+    int iter = 0;
+    auto opRet = frame->_stack.execute();
+
+    if (opRet != 0) {
+        if (opRet != 1) {
+            cout << "Unable to execute some operation " << endl;
+        }
+    }
+
 }
