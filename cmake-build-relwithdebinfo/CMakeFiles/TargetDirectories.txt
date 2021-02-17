@@ -1,3 +1,0 @@
-/home/serhio/CLionProjects/cpp_vm/cmake-build-relwithdebinfo/CMakeFiles/rebuild_cache.dir
-/home/serhio/CLionProjects/cpp_vm/cmake-build-relwithdebinfo/CMakeFiles/edit_cache.dir
-/home/serhio/CLionProjects/cpp_vm/cmake-build-relwithdebinfo/CMakeFiles/cpp_vm.dir
